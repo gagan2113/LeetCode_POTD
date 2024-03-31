@@ -1,20 +1,22 @@
-class Solution:
+class Solution(object):
     def subarraysWithKDistinct(self, nums, k):
-        return self.subarraysWithAtMostKDistinct(nums, k) - self.subarraysWithAtMostKDistinct(nums, k - 1)
-
-    def subarraysWithAtMostKDistinct(self, nums, k):
-        ans = 0
-        count = [0] * (len(nums) + 1)
-
-        l = 0
-        for r in range(len(nums)):
-            count[nums[r]] += 1
-            if count[nums[r]] == 1:
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
+        cnt, res, l, m = [0] * (len(nums) + 1), 0, 0, 0
+        for n in nums:
+            cnt[n] += 1
+            if cnt[n] == 1:
                 k -= 1
-            while k == -1:
-                count[nums[l]] -= 1
-                if count[nums[l]] == 0:
-                    k += 1
-                l += 1
-            ans += r - l + 1
-        return ans
+                if (k < 0):
+                    cnt[nums[m]] = 0
+                    m += 1
+                    l = m
+            if k <= 0:
+                while(cnt[nums[m]] > 1):
+                    cnt[nums[m]] -= 1
+                    m += 1
+                res += m - l + 1
+        return res  
